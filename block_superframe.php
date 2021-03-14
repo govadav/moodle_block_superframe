@@ -79,8 +79,11 @@ class block_superframe extends block_base {
         $this->content->footer = '';
         $this->content->text = get_string('welcomeuser', 'block_superframe',
                 $USER);
-        $this->content->text .= '<br><a href="' . $CFG->wwwroot . '/blocks/superframe/view.php">' .
-                get_string('viewlink', 'block_superframe') . '</a>';
+        //$this->content->text .= '<br><a href="' . $CFG->wwwroot . '/blocks/superframe/view.php">' .
+                //get_string('viewlink', 'block_superframe') . '</a>';
+        $url = new moodle_url('/blocks/superframe/view.php', ['blockid' => $blockid]);
+        $this->content->text .= '<p>' . html_writer::link($url,
+        get_string('viewlink', 'block_superframe')) . '</p>';
     }
     /**
      * This is a list of places where the block may or
@@ -97,6 +100,13 @@ class block_superframe extends block_base {
      * Allow multiple instances of the block.
      */
     public function instance_allow_multiple() {
+        return true;
+    }
+
+     /**
+     * Allow block configuration.
+     */
+    function has_config() {
         return true;
     }
 
