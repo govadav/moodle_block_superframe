@@ -54,6 +54,7 @@ $string['small'] = 'Small';
 $string['medium'] = 'Medium';
 $string['large'] = 'Large';
 $string['size'] = 'Select a size for your iframe';
+$string['returncourse'] = 'Return to course';
 
 
 

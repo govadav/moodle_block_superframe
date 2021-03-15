@@ -30,10 +30,14 @@
 }}
 
 
-<div  class="container">
-    <h5>{{heading}}</h5>
-    <p>{{user}}</p>
-    <iframe src="{{url}}" height="{{height}}" width="{{width}}">
-    </iframe>
-    <p><a href="{{{returnlink}}}">{{returntext}}</a></p>
+<div>
+
+    <h3>{{welcome}}</h3>
+    <a href="{{{url}}}">{{text}}</a>
+    <br><br>
+    {{#students}}
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-warning">{{.}}</li>
+    </ul>
+    {{/students}}
 </div>
