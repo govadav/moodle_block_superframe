@@ -81,9 +81,19 @@ class block_superframe extends block_base {
                 $USER);
         //$this->content->text .= '<br><a href="' . $CFG->wwwroot . '/blocks/superframe/view.php">' .
                 //get_string('viewlink', 'block_superframe') . '</a>';
-        $url = new moodle_url('/blocks/superframe/view.php', ['blockid' => $blockid]);
-        $this->content->text .= '<p>' . html_writer::link($url,
-        get_string('viewlink', 'block_superframe')) . '</p>';
+        // Add the blockid to the Moodle URL for the view page.
+        $blockid = $this->instance->id;
+        $context = context_block::instance($blockid);
+
+        // Check the capability.
+        if (has_capability('block/superframe:seeviewpagelink', $context)) {
+
+            $url = new moodle_url('/blocks/superframe/view.php', ['blockid' => $blockid]);
+            $this->content->text .= '<p>' . html_writer::link($url,
+            get_string('viewlink', 'block_superframe')) . '</p>';
+        }
+
+        return $this->content;
     }
     /**
      * This is a list of places where the block may or
@@ -108,6 +118,27 @@ class block_superframe extends block_base {
      */
     function has_config() {
         return true;
+    }
+
+    private static function get_course_users($courseid) {
+        global $DB;
+
+        $sql = "SELECT u.id, u.firstname, u.lastname
+                FROM {course} as c
+                JOIN {context} as x ON c.id = x.instanceid
+                JOIN {role_assignments} as r ON r.contextid = x.id
+                JOIN {user} AS u ON u.id = r.userid
+                 WHERE c.id = :courseid
+                 AND r.roleid = :roleid";
+
+        // In real world query should check users are not deleted/suspended.
+
+        $records = $DB->get_records_sql($sql, ['courseid' => $courseid, 'roleid' => 5]);
+
+        echo "Hello";
+        return $records;
+
+       
     }
 
 }

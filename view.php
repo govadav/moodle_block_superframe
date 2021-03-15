@@ -32,7 +32,9 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_title(get_string('pluginname', 'block_superframe'));
 $PAGE->navbar->add(get_string('pluginname', 'block_superframe'));
 require_login();
-
+// Check the users permissions to see the view page.
+$context = context_course::instance($COURSE->id);
+require_capability('block/superframe:seeviewpage', $context);
 // Get the instance configuration data from the database.
 // It's stored as a base 64 encoded serialized string.
 $configdata = $DB->get_field('block_instances', 'configdata', ['id' => $blockid]);
@@ -68,20 +70,24 @@ switch ($config->size) {
         $height = 720;
         break;
 }
+//Writing render function to output the following code
+// // Start output to browser.
+// echo $OUTPUT->header();
+// echo $OUTPUT->heading(get_string('pluginname', 'block_superframe'), 5);
+// // Dummy content.
+// echo '<br>' . fullname($USER) . '<br>';
 
-// Start output to browser.
-echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('pluginname', 'block_superframe'), 5);
-// Dummy content.
-echo '<br>' . fullname($USER) . '<br>';
-
-// Build and display an iframe.
-$attributes = ['src' => $url,
-               'width' => $width,
-               'height' => $height];
-echo html_writer::start_tag('iframe', $attributes);
-echo html_writer::end_tag('iframe');
+// // Build and display an iframe.
+// $attributes = ['src' => $url,
+//                'width' => $width,
+//                'height' => $height];
+// echo html_writer::start_tag('iframe', $attributes);
+// echo html_writer::end_tag('iframe');
 
 
-//send footer out to browser
-echo $OUTPUT->footer();
+// //send footer out to browser
+// echo $OUTPUT->footer();
+
+
+$renderer = $PAGE->get_renderer('block_superframe');
+$renderer->display_view_page($url, $width, $height);

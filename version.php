@@ -30,6 +30,6 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019032300; // Block with admin settings.
+$plugin->version   = 2019032400; // Block with admin settings.
 $plugin->requires  = 2017111300; // Minimum Moodle 3.4.
 $plugin->component = 'block_superframe';
