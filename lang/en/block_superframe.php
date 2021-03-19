@@ -55,6 +55,19 @@ $string['medium'] = 'Medium';
 $string['large'] = 'Large';
 $string['size'] = 'Select a size for your iframe';
 $string['returncourse'] = 'Return to course';
-
+$string['blockid'] = 'ID';
+$string['blockname'] = 'Block name';
+$string['course'] = 'Course shortname';
+$string['catname'] = 'Category';
+$string['poptext'] = 'List Blocks';
+$string['tablecaption'] = 'Block instances by course';
+$string['tabletext'] = 'Table editing';
+$string['size'] = 'Select a size for your iframe';
+$string['custom'] = 'custom';
+$string['small'] = 'small';
+$string['medium'] = 'medium';
+$string['large'] = 'large';
+// Navigation API.
+$string['userlink'] = 'Installed blocks';
 
 

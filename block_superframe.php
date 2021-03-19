@@ -85,6 +85,7 @@ class block_superframe extends block_base {
         $blockid = $this->instance->id;
         $courseid = $this->page->course->id;
         $context = context_block::instance($blockid);
+        $users = self::get_course_users($courseid);
 
         //block content from renderer
 
@@ -95,15 +96,20 @@ class block_superframe extends block_base {
         //     // $this->content->text .= '<p>' . html_writer::link($url,
         //     // get_string('viewlink', 'block_superframe')) . '</p>';
         //     //adding renderer for above two lies display
+            // displaying students list with renderer
             $renderer = $this->page->get_renderer('block_superframe');
-            $this->content->text = $renderer->fetch_block_content($blockid, $courseid);
+            $this->content->text = $renderer->fetch_block_content($blockid, $courseid, $users);
+            // Add a link to the popup page:
+            // Add a popup link to the block table.
+            // $popurl = new moodle_url('/blocks/superframe/block_data.php');
+            // $poplink = $this->output->action_link($popurl, get_string('poptext', 'block_superframe'), new popup_action('click', $popurl));
         }
 
         // List of course students.
-        $users = self::get_course_users($courseid);
-        foreach ($users as $user) {
-            $this->content->text .='<li>' . $user->lastname . ', ' . $user->firstname . '</li>';
-        }
+       
+        // foreach ($users as $user) {
+        //     $this->content->text .='<li>' . $user->lastname . ', ' . $user->firstname . '</li>';
+        // }
 
         return $this->content;
     }

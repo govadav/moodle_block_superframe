@@ -36,6 +36,24 @@ class block_superframe_renderer extends plugin_renderer_base {
         //return link
         $data->returnlink = new moodle_url('/course/view.php',['id' => $courseid]);
         $data->returntext = get_string('returncourse', 'block_superframe');
+        // Text for the links and the size parameter.
+        $strings = array();
+        $strings[] = get_string('custom', 'block_superframe');
+        $strings[] = get_string('small', 'block_superframe');
+        $strings[] = get_string('medium', 'block_superframe');
+        $strings[] = get_string('large', 'block_superframe');
+
+        // Create the data structure for the links.
+        $links = array();
+        $link = new moodle_url('/blocks/superframe/view.php', ['courseid' => $courseid,
+                'blockid' => $blockid]);
+        
+        foreach ($strings as $string) {
+            $links[] = ['link' => $link->out(false, ['size' => $string]),
+                    'text' => $string];
+        }
+
+        $data->linkdata = $links;
         // Start output to browser.
         echo $this->output->header();
 
@@ -46,15 +64,59 @@ class block_superframe_renderer extends plugin_renderer_base {
         echo $this->output->footer();
     }
 
-function fetch_block_content($blockid, $courseid){
+function fetch_block_content($blockid, $courseid, $students){
 
-        $data = new stdClass();  
+        $data = new stdClass(); 
+        $data->studentlist = array();
+        foreach ($students as $student) {     
+            $data->studentlist[] = $student->firstname;
+        }
+ 
         $data->url  = new moodle_url('/blocks/superframe/view.php', ['blockid' => $blockid,'courseid' => $courseid]);
         $data->welcome = get_string('message', 'block_superframe');
         $data->text=get_string('viewlink', 'block_superframe');
+
+        // Add a link to the popup page:
+        $data->popurl = new moodle_url('/blocks/superframe/block_data.php');
+        $data->poptext = get_string('poptext', 'block_superframe');
+        $data->tableurl = new moodle_url('/blocks/superframe/tablemanager.php');
+        $data->tabletext = get_string('tabletext', 'block_superframe');
         
         return $this->render_from_template('block_superframe/block_content', $data);
         
 
     }
+
+/**
+     * Function to display a table of records
+     * @param array the records to display.
+     * @return none.
+     */
+    public function display_block_table($records) {
+        // Prepare the data for the template.
+        $table = new stdClass();
+        // Table headers.
+        $table->tableheaders = [
+                get_string('blockid', 'block_superframe'),
+                get_string('blockname', 'block_superframe'),
+                get_string('course', 'block_superframe'),
+                get_string('catname', 'block_superframe'),
+        ];
+        // Build the data rows.
+        foreach ($records as $record) {
+            $data = array();
+            $data[] = $record->id;
+            $data[] = $record->blockname;
+            $data[] = $record->shortname;
+            $data[] = $record->catname;
+            $table->tabledata[] = $data;
+        }
+        // Start output to browser.
+        echo $this->output->header();
+        // Call our template to render the data.
+        echo $this->render_from_template(
+                'block_superframe/block_data', $table);
+        // Finish the page.
+        echo $this->output->footer();
+    }    
 }
