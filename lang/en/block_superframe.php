@@ -70,4 +70,5 @@ $string['large'] = 'large';
 // Navigation API.
 $string['userlink'] = 'Installed blocks';
 
-
+$string['about'] = 'About Superframe';
+$string['pageviewed'] = 'Page viewed';

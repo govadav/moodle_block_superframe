@@ -32,12 +32,13 @@
 
 <div>
 
-    <h3>{{welcome}}</h3>
-    <a href="{{{url}}}">{{text}}</a>
-    <br>
-    <a href={{{popurl}}} target="_blank"> {{poptext}}</a>
-    <br>
-    <a href={{{tableurl}}} target="_blank"> {{tabletext}}</a>
+    <h3 class="{{headingclass}}">{{welcome}}</h3>
+    <ul class="nav flex-column">
+      <li class="nav-item"><a href="{{{url}}}">{{linktext}}</a></li>
+      <li class="nav-item"><a href="{{{popurl}}}">{{poptext}}</a></li>
+      <li class="nav-item"><a href="{{{tableurl}}}">{{tabletext}}</a></li>
+      <li class="nav-item">Last access {{#userdate}} {{access}}, {{#str}} strftimedate {{/str}} {{/userdate}}</li>
+    </ul>
     <br><br>
     {{#studentlist}}
       <ul class="list-group">

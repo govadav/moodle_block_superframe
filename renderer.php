@@ -26,7 +26,7 @@ class block_superframe_renderer extends plugin_renderer_base {
  function display_view_page($url, $width, $height, $courseid) {
         global $USER;
         $data = new stdClass();
-
+        $this->page->requires->js_call_amd('block_superframe/amd_modal', 'init');
         // Page heading and iframe data.
         $data->heading = get_string('pluginname', 'block_superframe');
         $data->url = $url;
@@ -54,6 +54,8 @@ class block_superframe_renderer extends plugin_renderer_base {
         }
 
         $data->linkdata = $links;
+        // Link to the AMD modal.
+        $data->modallinktext = get_string('about', 'block_superframe');
         // Start output to browser.
         echo $this->output->header();
 
@@ -65,13 +67,15 @@ class block_superframe_renderer extends plugin_renderer_base {
     }
 
 function fetch_block_content($blockid, $courseid, $students){
-
+        global $USER, $DB;
         $data = new stdClass(); 
         $data->studentlist = array();
         foreach ($students as $student) {     
             $data->studentlist[] = $student->firstname;
         }
- 
+        $name = $USER->firstname . ' ' . $USER->lastname;
+        $this->page->requires->js_call_amd('block_superframe/test_amd', 'init', ['name' => $name]);
+        $data->headingclass = 'block_superframe_heading';
         $data->url  = new moodle_url('/blocks/superframe/view.php', ['blockid' => $blockid,'courseid' => $courseid]);
         $data->welcome = get_string('message', 'block_superframe');
         $data->text=get_string('viewlink', 'block_superframe');
@@ -81,6 +85,7 @@ function fetch_block_content($blockid, $courseid, $students){
         $data->poptext = get_string('poptext', 'block_superframe');
         $data->tableurl = new moodle_url('/blocks/superframe/tablemanager.php');
         $data->tabletext = get_string('tabletext', 'block_superframe');
+        $data->access = $DB->get_field('user_lastaccess', 'timeaccess', ['courseid' => $courseid, 'userid' => $USER->id], MUST_EXIST);
         
         return $this->render_from_template('block_superframe/block_content', $data);
         
